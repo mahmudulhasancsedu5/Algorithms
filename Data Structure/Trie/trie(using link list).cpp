@@ -58,7 +58,7 @@ void insert_trie(node* curr,string str,int poss)
 
 }
 
-bool search_trie(node* curr,string str,int poss)
+bool search_word(node* curr,string str,int poss)
 {
 
 
@@ -76,9 +76,44 @@ bool search_trie(node* curr,string str,int poss)
     int ch_ind=str[poss]-'a';
     if(curr->next[ch_ind]==NULL) return false;
 
-    return search_trie(curr->next[ch_ind],str,poss+1);
+    return search_word(curr->next[ch_ind],str,poss+1);
 
 
+}
+void print_word_suff(node* curr,string prefix)
+{
+    if(curr==NULL) return;
+    if(curr->endMark==1)
+    {
+        cout<<prefix<<endl;
+    }
+    for(int i=0;i<26;i++)
+    {
+
+        print_word_suff(curr->next[i],prefix+(char)('a'+i));
+
+
+    }
+    return;
+
+}
+bool search_prefix(node* curr,string prefix,int poss)
+{
+    if(poss+1==prefix.size())
+    {
+        cout<<"Wprds start with prefix : "<<prefix<<endl;
+        int char_ind=prefix[poss]-'a';
+        print_word_suff(curr->next[char_ind],prefix);
+
+        return true;
+    }
+
+
+    int char_ind=prefix[poss]-'a';
+
+    if(curr->next[char_ind]==NULL) return false;
+
+    return search_prefix(curr->next[char_ind],prefix,poss+1);
 }
 int main()
 {
@@ -96,7 +131,7 @@ int main()
 
     }
 
-    bool f=search_trie(root,"mouka",0);
+    bool f=search_word(root,"tomatos",0);
     if(f) cout<<"Found"<<endl;
     else
     {
@@ -104,6 +139,8 @@ int main()
     }
 
     //delete(root);
+
+    search_prefix(root,"ap",0);
 
 
     return 0;
